@@ -17,8 +17,7 @@
 
 html,
 body {
-  font-family:
-    'Pretendard Variable', 'Noto Sans KR Variable', 'Inter Variable', sans-serif;
+  font-family: 'Pretendard Variable', 'Noto Sans KR Variable', 'Inter Variable', sans-serif;
   background: var(--color-bg);
   color: #222;
   min-height: 100vh;

@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(req.body),
     });
@@ -22,4 +22,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (e) {
     res.status(500).json({ error: 'OpenAI proxy error', detail: String(e) });
   }
-} 
+}

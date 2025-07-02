@@ -13,4 +13,4 @@ describe('OpenAI Proxy API', () => {
     await handler(req, res);
     expect(res._getStatusCode()).toBe(500);
   });
-}); 
+});
