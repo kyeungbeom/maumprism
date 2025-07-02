@@ -1,19 +1,19 @@
 {
   "devDependencies": {
     "@eslint/js": "^9.30.0",
+    "@prisma/client": "^6.11.0",
     "@types/jest": "^30.0.0",
     "@types/react-infinite-scroll-component": "^4.2.5",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.3.4",
     "jest": "^30.0.3",
     "prettier": "^3.6.2",
-    "prisma": "^6.10.1",
+    "prisma": "^6.11.0",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.1"
   },
   "dependencies": {
-    "@prisma/client": "^6.11.0",
     "@sentry/nextjs": "^9.33.0",
     "@types/stripe": "^8.0.416",
     "next-auth": "^4.24.11",
