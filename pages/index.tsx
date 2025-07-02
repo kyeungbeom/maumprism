@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const emotions = [
   { emoji: '😊', label: '행복' },
@@ -13,72 +13,84 @@ export default function Home() {
   const [note, setNote] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
   const handleSubmit = async () => {
-    if (!selectedEmotion) return;
-    setLoading(true);
-    setError(null);
-    const emotionObj = emotions.find((e) => e.emoji === selectedEmotion);
-    const res = await fetch('/api/logs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ emotion: emotionObj?.label, note }),
-    });
-    if (res.ok) {
-      setSubmitted(true);
-    } else {
-      const data = await res.json();
-      setError(data.error || '오류가 발생했습니다.');
+    if (!selectedEmotion) {
+      setError('감정을 선택해주세요.');
+      return;
     }
-    setLoading(false);
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emotion: selectedEmotion, note }),
+      });
+
+      if (!res.ok) throw new Error('저장 실패');
+
+      setSubmitted(true);
+    } catch {
+      setError('저장 중 문제가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (submitted) {
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen">
-        <h1 className="mb-4 text-2xl font-bold">감정을 기록했어요!</h1>
-        <p className="text-lg">오늘의 감정: {selectedEmotion}</p>
-        <button
-          className="px-4 py-2 mt-8 bg-yellow-400 rounded"
-          onClick={() => setSubmitted(false)}
-        >
-          다시 입력
-        </button>
-      </div>
-    );
-  }
+  const reset = () => {
+    setSelectedEmotion(null);
+    setNote('');
+    setSubmitted(false);
+    setError('');
+  };
 
   return (
-    <div className="flex flex-col justify-center items-center p-4 min-h-screen">
-      <h1 className="mb-6 text-2xl font-bold">오늘의 감정은 어떤가요?</h1>
-      <div className="flex mb-6 space-x-4">
-        {emotions.map(({ emoji, label }) => (
+    <main className="flex flex-col justify-center items-center p-4 min-h-screen bg-gray-50">
+      {!submitted ? (
+        <>
+          <h1 className="mb-4 text-2xl font-bold">오늘의 감정은?</h1>
+          <div className="flex mb-4 space-x-3">
+            {emotions.map(({ emoji, label }) => (
+              <button
+                key={label}
+                className={`text-3xl transition-transform ${
+                  selectedEmotion === emoji ? 'scale-125' : ''
+                }`}
+                onClick={() => setSelectedEmotion(emoji)}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+          <textarea
+            className="p-2 mb-4 w-full max-w-md rounded border"
+            rows={3}
+            placeholder="메모를 남겨보세요 (선택 사항)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+          {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
           <button
-            key={label}
-            className={`text-3xl ${selectedEmotion === emoji ? 'scale-125' : ''}`}
-            onClick={() => setSelectedEmotion(emoji)}
+            onClick={handleSubmit}
+            disabled={!selectedEmotion || loading}
+            className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:opacity-50"
           >
-            {emoji}
+            {loading ? '기록 중...' : '기록하기'}
           </button>
-        ))}
-      </div>
-      <textarea
-        className="p-2 mb-4 w-full max-w-xs rounded border"
-        rows={2}
-        placeholder="간단한 메모 (선택)"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-      />
-      {error && <div className="mb-2 text-sm text-red-500">{error}</div>}
-      <button
-        className="px-4 py-2 w-full max-w-xs text-white bg-yellow-400 rounded disabled:opacity-50"
-        disabled={!selectedEmotion || loading}
-        onClick={handleSubmit}
-      >
-        {loading ? '기록 중...' : '기록하기'}
-      </button>
-      <div className="mb-4 text-5xl">{selectedEmotion}</div>
-    </div>
+        </>
+      ) : (
+        <div className="text-center">
+          <h2 className="mb-2 text-xl font-semibold">감정을 기록했어요!</h2>
+          <div className="mb-4 text-5xl">{selectedEmotion}</div>
+          <button onClick={reset} className="text-blue-500 underline">
+            다시 입력
+          </button>
+        </div>
+      )}
+    </main>
   );
 }
