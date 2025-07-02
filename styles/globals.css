@@ -1,0 +1,59 @@
+@import '@fontsource/pretendard/variable.css';
+@import '@fontsource/noto-sans-kr/variable.css';
+@import '@fontsource/inter/variable.css';
+
+:root {
+  --color-main: #ffafbd;
+  --color-sub: #aec6cf;
+  --color-accent: #ffd1dc;
+  --color-point: #77dd77;
+  --color-bg: #fdf6f0;
+  --color-card: #fff8fa;
+  --color-shadow: 0 4px 24px 0 rgba(255, 175, 189, 0.12);
+  --radius-lg: 2rem;
+  --radius-md: 1rem;
+  --radius-sm: 0.5rem;
+}
+
+html,
+body {
+  font-family:
+    'Pretendard Variable', 'Noto Sans KR Variable', 'Inter Variable', sans-serif;
+  background: var(--color-bg);
+  color: #222;
+  min-height: 100vh;
+}
+
+.bg-blur {
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--color-shadow);
+  padding: 2rem;
+  margin: 1rem 0;
+}
+
+.btn-main {
+  background: linear-gradient(90deg, #ffafbd 0%, #aec6cf 100%);
+  color: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 8px 0 rgba(255, 175, 189, 0.15);
+  font-weight: 600;
+  transition: box-shadow 0.2s;
+}
+.btn-main:active {
+  box-shadow: 0 0 16px 4px #ffd1dc;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #fdf6f0;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffd1dc;
+  border-radius: 8px;
+}
