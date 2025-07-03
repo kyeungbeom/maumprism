@@ -1,14 +1,20 @@
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { notFound } from 'next/navigation';
-import ClientReportView from './ClientReportView';
+import AppWidgetLayout from '../../components/AppWidgetLayout';
+import ClientOnlyReport from './ClientOnlyReport';
 
-export default function ReportsPage() {
+export default async function ReportsPage() {
   const cookieStore = cookies();
-  // 서버에서 데이터 fetch 및 로직 처리 가능
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+
+  const { data } = await supabase.from('reports').select('*');
+
+  if (!data) notFound();
+
   return (
-    <div>
-      <ClientReportView />
-    </div>
+    <AppWidgetLayout>
+      <ClientOnlyReport reports={data} />
+    </AppWidgetLayout>
   );
 }
